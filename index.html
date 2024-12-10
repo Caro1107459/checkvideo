@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5视频播放器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #aiButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 500;
+        }
+        .close-btn {
+            cursor: pointer;
+            color: #f00;
+            float: right;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="player"></div>
+
+    <button id="aiButton">AI小助手</button>
+
+    <div id="overlay"></div>
+
+    <div id="popup">
+        <span class="close-btn" onclick="closePopup()">×</span>
+        <h2>AI小助手</h2>
+        <p>视频简介balabala</p >
+        <p><a href=" " onclick="seekToTime(3); return false;">00:03: 视频要点</a ></p >
+    </div>
+
+    <!-- 使用更新后的播放器脚本地址 -->
+    <script src="https://player.polyv.net/script/player.js"></script>
+    <script>
+        var player;
+
+        function initPlayer() {
+            player = polyvPlayer({
+                wrap: '#player',
+                width: 800,
+                height: 533,
+                vid: 'g9e4d25871f6d6d45e89db120962c7bb_g'
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initPlayer);
+
+        document.getElementById('aiButton').addEventListener('click', function() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        });
+
+        function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function seekToTime(seconds) {
+            if (player && typeof player.j2s_seekVideo === 'function') {
+                player.j2s_seekVideo(seconds);
+                console.log('Seeking to:', seconds);
+            } else {
+                console.error('Player not initialized or seek function not available.');
+            }
+            closePopup();
+        }
+    </script>
+
+</body>
+</html>
